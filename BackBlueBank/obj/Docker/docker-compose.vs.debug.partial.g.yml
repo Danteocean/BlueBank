@@ -1,0 +1,30 @@
+version: '3.4'
+
+services:
+  backbluebank:
+    image: backbluebank:dev
+    container_name: BackBlueBank
+    build:
+      target: base
+      labels:
+        com.microsoft.created-by: "visual-studio"
+        com.microsoft.visual-studio.project-name: "BackBlueBank"
+    environment:
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - NUGET_PACKAGES=C:\.nuget\packages
+      - ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS=true
+      #- NUGET_FALLBACK_PACKAGES=$container_paths_to_fallback_packages_backbluebank$
+    volumes:
+      - C:\Users\danie\OneDrive\Documentos\BlueBank\BackBlueBank\BackBlueBank:C:\app
+      - C:\Users\danie\OneDrive\Documentos\BlueBank\BackBlueBank:C:\src
+      - C:\Users\danie\onecoremsvsmon:C:\remote_debugger:ro
+#$nuget_volume_mapping_backbluebank$
+      - ${APPDATA}/ASP.NET/Https:C:\Users\ContainerUser\AppData\Roaming\ASP.NET\Https:ro
+      - ${APPDATA}/Microsoft/UserSecrets:C:\Users\ContainerUser\AppData\Roaming\Microsoft\UserSecrets:ro
+
+    entrypoint: C:\\remote_debugger\\x64\\msvsmon.exe /noauth /anyuser /silent /nostatus /noclrwarn /nosecuritywarn /nofirewallwarn /nowowwarn /timeout:2147483646 
+    labels:
+      com.microsoft.visualstudio.debuggee.program: "\"C:\\Program Files\\dotnet\\dotnet.exe\""
+      #com.microsoft.visualstudio.debuggee.arguments: " $debuggee_arguments_probing_paths_backbluebank$ \"C:\\app\\bin\\Debug\\net5.0\\BackBlueBank.dll\""
+      com.microsoft.visualstudio.debuggee.workingdirectory: "C:\\app"
+      com.microsoft.visualstudio.debuggee.killprogram: "C:\\remote_debugger\\x64\\utils\\KillProcess.exe dotnet.exe"

@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  backbluebank:
+    image: ${DOCKER_REGISTRY-}backbluebank
+    build:
+      context: .
+      dockerfile: BackBlueBank\Dockerfile
